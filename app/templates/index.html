@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row text-center mb-4">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white p-3">
+      <h5>Total Students</h5>
+      <h3>{{ total_students }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success text-white p-3">
+      <h5>Average Score</h5>
+      <h3>{{ avg_score }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-warning text-white p-3">
+      <h5>Top Student</h5>
+      <h3>{{ top_student }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-danger text-white p-3">
+      <h5>A Grade Students</h5>
+      <h3>{{ a_grade_count }}</h3>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h3>Students</h3>
+    <div class="input-group w-25">
+      <input type="text" id="studentSearch" class="form-control" placeholder="Search by name or roll number">
+      <button id="clearSearch" class="btn btn-outline-secondary">Clear</button>
+    </div>
+  </div>
+
+  <table class="table table-striped table-bordered mt-3" id="studentsTable">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Roll Number</th>
+        <th>Average</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td class="stu-name">{{ s.name }}</td>
+        <td class="stu-roll">{{ s.roll_number }}</td>
+        <td>{{ "%.2f"|format(s.average() or 0) }}</td>
+        <td>
+          <a href="{{ url_for('main.student_details', sid=s.id) }}" class="btn btn-sm btn-info">View</a>
+                <form method="post" action="{{ url_for('main.delete_student', sid=s.id) }}" style="display:inline" onsubmit="return confirm('Delete student?');">
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+<style>
+.search-highlight {
+  background-color: #fff3cd !important; /* light yellow */
+  transition: background-color 0.4s ease;
+  outline: 2px solid #ffc107;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('studentSearch');
+  const clearBtn = document.getElementById('clearSearch');
+  const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+
+  function clearHighlights() {
+    rows.forEach(r => r.classList.remove('search-highlight'));
+  }
+
+  function doSearch() {
+    const q = input.value.trim().toLowerCase();
+    clearHighlights();
+    if (!q) return;
+
+    const matches = rows.filter(row => {
+      const name = row.querySelector('.stu-name').innerText.toLowerCase();
+      const roll = row.querySelector('.stu-roll').innerText.toLowerCase();
+      return name.includes(q) || roll.includes(q);
+    });
+
+    matches.forEach(m => m.classList.add('search-highlight'));
+    if (matches.length) {
+      matches[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  input.addEventListener('input', doSearch);
+
+  clearBtn.addEventListener('click', e => {
+    e.preventDefault();
+    input.value = '';
+    clearHighlights();
+    input.focus();
+  });
+});
+</script>
+{% endblock %}

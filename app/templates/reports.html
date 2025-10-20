@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Reports Dashboard</h2>
+
+<!-- Subject averages -->
+<table class="table table-bordered mt-3">
+  <thead><tr><th>Subject</th><th>Average</th><th>Topper</th></tr></thead>
+  <tbody>
+    {% for subj in subjects %}
+    <tr>
+      <td>{{ subj }}</td>
+      <td>{{ subject_avgs[subj] if subject_avgs[subj] else '—' }}</td>
+      <td>{% if toppers[subj] %}{{ toppers[subj].name }}{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="row mt-4 text-center">
+
+  <div class="col-md-6 mb-4">
+    <h6>Top 5 Students</h6>
+    <div style="width:260px; height:200px; margin:auto;">
+      <canvas id="topChart" width="260" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <h6>Weak 5 Students</h6>
+    <div style="width:260px; height:200px; margin:auto;">
+      <canvas id="bottomChart" width="260" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <h6>Grade Distribution</h6>
+    <div style="width:260px; height:200px; margin:auto;">
+      <canvas id="gradeChart" width="260" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <h6>Average Marks per Subject</h6>
+    <div style="width:260px; height:200px; margin:auto;">
+      <canvas id="avgChart" width="260" height="200"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<a href="{{ url_for('main.index') }}" class="btn btn-link mt-3">← Back</a>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const topNames = {{ top_names|tojson }};
+const topScores = {{ top_scores|tojson }};
+const bottomNames = {{ bottom_names|tojson }};
+const bottomScores = {{ bottom_scores|tojson }};
+const subjects = {{ subjects|tojson }};
+const averages = {{ subject_avgs.values()|list|tojson }};
+const gradeLabels = {{ grade_count.keys()|list|tojson }};
+const gradeValues = {{ grade_count.values()|list|tojson }};
+
+// 🎯 Smaller + smoother chart options
+const smallOpt = {
+  responsive: true,
+  maintainAspectRatio: true,
+  aspectRatio: 1.3, // smaller size
+  scales: {
+    y: {
+      min: 0,
+      max: 400,
+      ticks: { stepSize: 50, font: { size: 8 } },
+      title: { display: true, text: 'Marks', font: { size: 9 } }
+    },
+    x: {
+      ticks: { font: { size: 8 }, maxRotation: 0 },
+      title: { display: true, text: 'Students', font: { size: 9 } }
+    }
+  },
+  plugins: {
+    legend: { display: false },
+    tooltip: { bodyFont: { size: 9 }, titleFont: { size: 10 } }
+  }
+};
+
+new Chart(document.getElementById('topChart'), {
+  type: 'bar',
+  data: {
+    labels: topNames,
+    datasets: [{ label: 'Marks', data: topScores, backgroundColor: '#0d6efd' }]
+  },
+  options: smallOpt
+});
+
+new Chart(document.getElementById('bottomChart'), {
+  type: 'bar',
+  data: {
+    labels: bottomNames,
+    datasets: [{ label: 'Marks', data: bottomScores, backgroundColor: '#dc3545' }]
+  },
+  options: smallOpt
+});
+
+new Chart(document.getElementById('gradeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: gradeLabels,
+    datasets: [{ data: gradeValues, backgroundColor: ['#198754', '#ffc107', '#fd7e14', '#dc3545'] }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1.3,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 8 } } } }
+  }
+});
+
+new Chart(document.getElementById('avgChart'), {
+  type: 'bar',
+  data: {
+    labels: subjects,
+    datasets: [{ label: 'Average', data: averages, backgroundColor: '#20c997' }]
+  },
+  options: {
+    ...smallOpt,
+    scales: { y: { min: 0, max: 100, stepSize: 10, beginAtZero: true } }
+  }
+});
+</script>
+
+
+
+{% endblock %}

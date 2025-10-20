@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Leaderboard 🏆</h2>
+<table class="table table-striped">
+  <thead><tr><th>Rank</th><th>Name</th><th>Roll</th><th>Average</th></tr></thead>
+  <tbody>
+  {% for s in students %}
+  <tr>
+    <td>{{ loop.index }}</td>
+    <td>{{ s.name }}</td>
+    <td>{{ s.roll_number }}</td>
+    <td>{{ s.average() or '—' }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('main.index') }}" class="btn btn-link">Back</a>
+{% endblock %}

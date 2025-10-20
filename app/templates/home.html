@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+body {
+  background: linear-gradient(135deg, #007bff, #6610f2);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  color: #fff;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-container {
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.glass-box {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 40px 60px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.glass-box h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.glass-box p {
+  font-size: 1rem;
+  color: #e0e0e0;
+  margin-bottom: 30px;
+}
+
+.glass-box .btn {
+  margin: 0 15px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 25px;
+  padding: 10px 30px;
+  transition: all 0.3s;
+}
+
+.glass-box .btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+</style>
+
+<div class="hero-container">
+  <div class="glass-box">
+    <h1>Student Performance Tracker</h1>
+    <p>Analyze, Track, and Improve Academic Performance Easily</p>
+    <div class="mt-3">
+      <a href="{{ url_for('main.login') }}" class="btn btn-outline-light">Login</a>
+      <a href="{{ url_for('main.register') }}" class="btn btn-light text-primary fw-bold">Register</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

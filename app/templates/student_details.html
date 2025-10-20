@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h3>{{ student.name }} ({{ student.roll_number }})</h3>
+  <hr>
+
+  <h5>Subjects & Marks</h5>
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr><th>Subject</th><th>Marks</th></tr>
+    </thead>
+    <tbody>
+      {% for subj in subjects %}
+      <tr>
+        <td>{{ subj }}</td>
+        <td>{{ grades.get(subj, 'N/A') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p><b>Average:</b> {{ avg or 'N/A' }}</p>
+  <p><b>Grade:</b> {{ student.grade_letter() }}</p>
+
+  <hr>
+  <h5>Performance Line Chart</h5>
+
+{% if chart_path %}
+  <div class="mb-4" style="max-width: 600px;">
+    <img src="{{ url_for('static', filename=chart_path) }}" class="img-fluid border rounded">
+  </div>
+{% else %}
+  <!-- fallback Chart.js version if you want -->
+  <div style="max-width: 600px;">
+    <canvas id="lineChart" width="600" height="250"></canvas>
+  </div>
+{% endif %}
+
+
+  <hr>
+  <h4>Add / Update Grade</h4>
+  <form method="POST" action="{{ url_for('main.add_grade', sid=student.id) }}">
+    <div class="row">
+      <div class="col-md-5">
+        <select name="subject" class="form-select">
+          {% for subj in subjects %}
+          <option value="{{ subj }}">{{ subj }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <input name="score" class="form-control" placeholder="Score (0–100)" required>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+
+  <a href="{{ url_for('main.generate_pdf', sid=student.id) }}" class="btn btn-success mt-3">
+    Download Report Card
+  </a>
+
+  <form method="POST" action="{{ url_for('main.delete_student', sid=student.id) }}" class="mt-2">
+    <button type="submit" class="btn btn-danger">Delete Student</button>
+  </form>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const grades = {{ grades | tojson }};
+const subjects = Object.keys(grades);
+const scores = Object.values(grades);
+
+if (subjects.length > 0) {
+  const ctx = document.getElementById('lineChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: subjects,
+      datasets: [{
+        label: 'Marks',
+        data: scores,
+        borderColor: '#007bff',
+        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+        fill: true,
+        borderWidth: 2,
+        tension: 0.3,
+        pointBackgroundColor: '#007bff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true, max: 100, title: { display: true, text: 'Marks' } },
+        x: { title: { display: true, text: 'Subjects' } }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}
