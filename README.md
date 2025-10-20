@@ -11,17 +11,16 @@ A Flask web app to manage and analyze student marks — view performance reports
 - Secure login system for teachers  
 
 ## 📸 Screenshots
-![](screenshots/one.png)
-![](screenshots/two.png)
-![](screenshots/three.png)
-![](screenshots/four.png)
-![](screenshots/five.png)
-![](screenshots/six.png)
-![](screenshots/seven.png)
-![](screenshots/eight.png)
-![](screenshots/nine.png)
-![](screenshots/ten.png)
-![](screenshots/eleven.png)
+![](Screenshots/one.png)
+![](Screenshots/two.png)
+![](Screenshots/three.png)
+![](Screenshots/five.png)
+![](Screenshots/six.png)
+![](Screenshots/seven.png)
+![](Screenshots/eight.png)
+![](Screenshots/nine.png)
+![](Screenshots/ten.png)
+![](Screenshots/eleven.png)
 
 ## ⚙️ Installation
 ```bash
