@@ -1,19 +1,31 @@
-# Student Performance Tracker
+# 🎓 Student Performance Tracker
 
-A Flask-based web application to manage and analyze student performance.
+A Flask web app to manage and analyze student marks — view performance reports, leaderboards, and generate report cards with graphs.
 
-## Features
-- Add, view, and delete students
-- Add or update subject-wise grades
-- Calculate student averages
-- Generate class-level reports (average and topper per subject)
-- Export all data to CSV
+## 🚀 Features
+- Add, update, delete students  
+- Add subjects & grades  
+- Auto calculate averages and grade letters  
+- Generate PDF report cards with line charts  
+- Leaderboard & performance reports  
+- Secure login system for teachers  
 
-## Setup
+## 📸 Screenshots
+![](screenshots/one.png)
+![](screenshots/two.png)
+![](screenshots/three.png)
+![](screenshots/four.png)
+![](screenshots/five.png)
+![](screenshots/six.png)
+![](screenshots/seven.png)
+![](screenshots/eight.png)
+![](screenshots/nine.png)
+![](screenshots/ten.png)
+![](screenshots/eleven.png)
 
+## ⚙️ Installation
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+git clone https://github.com/yourusername/Student_Performance_Tracker.git
+cd Student_Performance_Tracker
 pip install -r requirements.txt
-python app.py
-
+python run.py
