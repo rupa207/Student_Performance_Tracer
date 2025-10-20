@@ -102,3 +102,15 @@ WTForms==3.2.1
 xdg==5
 xkit==0.0.0
 zipp==1.0.0
+Flask==2.2.5
+Flask-Login==0.6.3
+Flask-Migrate==4.1.0
+Flask-SQLAlchemy==3.0.5
+gunicorn==21.2.0
+pandas==2.2.2
+matplotlib==3.10.7
+reportlab==4.0.9
+SQLAlchemy==2.0.43
+Werkzeug==2.3.6
+WTForms==3.2.1
+python-dotenv==1.0.0
